@@ -21,8 +21,7 @@ function App() {
                   <Route path="olvide/:token" element={ <NuevoPassword /> } />
                   <Route path="confirmar/:id" element={ <Confirmar /> } />
                </Route>
-            </Routes>
-            <Routes>
+         
                <Route path="/admin" element={ <RutaProtegida /> }>
                   <Route index element={ <AdministrarPacientes /> } />
                </Route>
