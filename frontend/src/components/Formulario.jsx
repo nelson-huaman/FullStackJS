@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Alerta from './Alerta';
+import usePacientes from '../hooks/usePacientes';
 
 const Formulario = () => {
 
@@ -7,10 +8,25 @@ const Formulario = () => {
    const [ propietario, setPropietario ] = useState('');
    const [ email, setEmail ] = useState('');
    const [ telefono, setTelefono ] = useState('');
-   const [ fecha, setFecha ] = useState(Date.now());
+   const [ fecha, setFecha ] = useState('');
    const [ sintomas, setSintomas ] = useState('');
+   const [ id, setId ] = useState(null);
 
    const [ alerta, setAlerta ] = useState({});
+
+   const { guardarPaciente, paciente } = usePacientes();
+
+   useEffect( () => {
+      if(paciente?.nombre) {
+         setNombre(paciente.nombre);
+         setPropietario(paciente.propietario);
+         setEmail(paciente.email);
+         setTelefono(paciente.telefono);
+         setFecha(new Date(paciente.fecha).toISOString());
+         setSintomas(paciente.sintomas);
+         setId(paciente._id);
+      }
+   }, [paciente]);
 
    const handleSubmit = e => {
       e.preventDefault();
@@ -22,6 +38,18 @@ const Formulario = () => {
          })
          return;
       }
+
+      guardarPaciente({nombre, propietario, email, telefono, fecha, sintomas, id});
+      setAlerta({
+         msg: 'Cuardado correctamente'
+      });
+      setNombre('');
+      setPropietario('');
+      setEmail('');
+      setTelefono('');
+      setFecha('');
+      setSintomas('');
+      setId('');
       
    }
 
@@ -29,11 +57,12 @@ const Formulario = () => {
 
    return (
       <>
-         <p className="text-lg text-center mb-10">
+         <h2 className="font-black text-3xl text-center">Administrador de Pacientes</h2>
+
+         <p className="text-xl mt-5 mb-10 text-center">
             Añade tus pacientes y {''}
             <span className="text-indigo-600 font-bold">Administralos</span>
          </p>
-
          
 
          <form
@@ -125,7 +154,7 @@ const Formulario = () => {
             </div>
             <input
                type="submit"
-               value="Agregar Paciente"
+               value={ id ? 'Guardar Cambios' : 'Agregar Paciente'}
                className="bg-indigo-600 w-full py-3 rounded text-white uppercase font-bold hover:cursor-pointer hover:bg-indigo-800 transition-colors"
             />
          </form>
