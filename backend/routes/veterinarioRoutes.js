@@ -6,10 +6,11 @@ import {
    autenticar,
    olvide,
    comprobarToken,
-   nuevoPassword
+   nuevoPassword,
+   actualizarPerfil,
+   actualizarPassword
 } from '../controllers/veterinarioController.js';
-import checkAuth from '../middleware/authmiddleware.js';
-
+import checkAuth from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -22,5 +23,7 @@ router.route('/olvide/:token').get(comprobarToken).post(nuevoPassword);
 
 // Privada
 router.get('/perfil', checkAuth, perfil);
+router.put('/perfil/:id', checkAuth, actualizarPerfil);
+router.put('/actualizar-password', checkAuth, actualizarPassword);
 
 export default router;
